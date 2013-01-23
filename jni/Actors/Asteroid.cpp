@@ -11,6 +11,8 @@ Asteroid::Asteroid(float fAngularVelocityX, float fAngularVelocityY, float fAngu
 	m_fAngularVelocityX = fAngularVelocityX;
 	m_fAngularVelocityY = fAngularVelocityY;
 	m_fAngularVelocityZ = fAngularVelocityZ;
+
+	m_fSpeedZ = 100.0f;
 }
 
 Asteroid::~Asteroid() {
@@ -19,7 +21,7 @@ Asteroid::~Asteroid() {
 
 void Asteroid::Update(int nTime)
 {
-	z = z + 1;
+	ActorBase::Update(nTime);
 
 	aX += m_fAngularVelocityX;
 	aY += m_fAngularVelocityY;

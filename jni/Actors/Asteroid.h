@@ -8,9 +8,9 @@
 #ifndef ASTEROID_H_
 #define ASTEROID_H_
 
-#include "Engine/Display/Object3D.h"
+#include "Actors/ActorBase.h"
 
-class Asteroid: public Object3D {
+class Asteroid: public ActorBase {
 public:
 	Asteroid(float fAngularVelocityX, float fAngularVelocityY, float fAngularVelocityZ);
 	virtual ~Asteroid();
