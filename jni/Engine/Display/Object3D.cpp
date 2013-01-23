@@ -25,6 +25,7 @@ Object3D::Object3D()
 ,aZ(0)
 ,m_nTimer(0)
 ,m_bExpired(false)
+,m_eObjectType(OBJECT_3D_UNDEFINED)
 {
 	pVolume = new VoxelVolume();
 }
@@ -32,6 +33,8 @@ Object3D::Object3D()
 void Object3D::Load(const char* szData)
 {
 	pVolume->SetData(szData);
+
+	m_nBoundingRadius = MAX(MAX(pVolume->GetVolumeWidth(), pVolume->GetVolumeHeight()), pVolume->GetVolumeDepth());
 }
 
 void Object3D::Update(int nTime)

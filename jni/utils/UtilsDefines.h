@@ -27,6 +27,8 @@ if (ptr != NULL)            \
     ptr = NULL;             \
 }
 
+#define MAX(x, y) x > y ? x : y
+
 #define TRANSFORM_MAT_LENGTH 16
 #define SWIPE_LEFT 1
 #define SWIPE_RIGHT 2

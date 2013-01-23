@@ -26,7 +26,7 @@ GLuint gProgram;
 
 float uiWidth = 0.0f; float uiHeight = 0.0f;
 static Stats stats;
-Object3D** pActors;
+ActorBase** pActors;
 
 static const char *gVertexShader = NULL;
 static const char *gFragmentShader  = NULL;
@@ -43,7 +43,7 @@ bool setupGraphics(int w, int h) {
 
 	if(!bIsSceneBuilt)
 	{
-		pActors = new Object3D*[128];
+		pActors = new ActorBase*[128];
 
 		pActors[0] = new Spaceship();
 		pActors[0]->Load(gSzShipRawData);
@@ -107,15 +107,45 @@ void Step() {
 	struct timespec now;
 	clock_gettime(CLOCK_MONOTONIC, &now);
 
+	int i,j;
+
+	float fActorDistanceSquared;
+	float fActorDistanceX, fActorDistanceY, fActorDistanceZ;
+
 	int nStepMs = now.tv_sec * 1000 + now.tv_nsec / 1000000 - gLastTS;
 	gLastTS = now.tv_sec * 1000 + now.tv_nsec / 1000000;
 	if(pActors != NULL)
 	{
 		GLRenderer::GetInstance()->PreRender();
-		for(int i = 0; i < 128; i++)
+
+
+		for(i = 0; i < 128; i++)
 		{
 			if(pActors[i] != NULL)
 			{
+				//checks for collisions with every other blocks
+
+				pActors[i]->SetCollisionPartner(NULL);
+
+				for(j = 0; j < 128; j++)
+				{
+					if(pActors[j] != NULL && j != i)
+					{
+						fActorDistanceX = pActors[i]->GetPositionX() - pActors[j]->GetPositionX();
+						fActorDistanceY = pActors[i]->GetPositionY() - pActors[j]->GetPositionY();
+						fActorDistanceZ = pActors[i]->GetPositionZ() - pActors[j]->GetPositionZ();
+
+						fActorDistanceSquared = fActorDistanceX * fActorDistanceX + fActorDistanceY * fActorDistanceY + fActorDistanceZ * fActorDistanceZ;
+
+						if(fActorDistanceSquared < (pActors[i]->GetBoundingRadius() + pActors[j]->GetBoundingRadius()) * (pActors[i]->GetBoundingRadius() + pActors[j]->GetBoundingRadius()))
+						{
+							pActors[i]->SetCollisionPartner(pActors[j]);
+
+							break;
+						}
+					}
+				}
+
 				pActors[i]->Update(nStepMs);
 				pActors[i]->Render(gProgram, uiWidth, uiHeight);
 

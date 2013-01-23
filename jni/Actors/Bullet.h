@@ -8,9 +8,9 @@
 #ifndef BULLET_H_
 #define BULLET_H_
 
-#include "Engine/Display/Object3D.h"
+#include "Actors/ActorBase.h"
 
-class Bullet: public Object3D {
+class Bullet: public ActorBase {
 public:
 	Bullet();
 	virtual ~Bullet();

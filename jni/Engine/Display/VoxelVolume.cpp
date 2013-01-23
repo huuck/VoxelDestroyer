@@ -42,6 +42,12 @@ VoxelVolume::VoxelVolume()
 ,m_vNormalData(NULL)
 ,m_vRawData(NULL)
 ,m_nVertexNum(0)
+,m_nLeftBound(0)
+,m_nRightBound(0)
+,m_nTopBound(0)
+,m_nBottomBound(0)
+,m_nForwardBound(0)
+,m_nBackBound(0)
 {
 }
 
@@ -73,6 +79,7 @@ void VoxelVolume::SetData(const char *newData) {
 		vNewParsedData[i] = decodeColorFor(newData[4095-i]);
 	}
 
+	m_vRawData = vNewParsedData;
 	for(i = 0; i < nNewDataLength; i++) {
 		z = (floorf(i/256) - 4.0f);
 		y = -(floorf((i%256)/16) - 8.0f);
@@ -81,7 +88,7 @@ void VoxelVolume::SetData(const char *newData) {
 		if(vNewParsedData[i] >= 0) {
 			if(x - 1 >= -8) {
 				//left face
-				if(vNewParsedData[getIForXYZ(x - 1, y, z)] < 0) {
+				if(GetPixelAt(x - 1, y, z) < 0) {
 					m_nVertexNum += 18;
 				}
 			} else {
@@ -90,7 +97,7 @@ void VoxelVolume::SetData(const char *newData) {
 
 			//right face
 			if(x + 1 < m_nVolumeWidth / 2) {
-				if(vNewParsedData[getIForXYZ(x + 1, y, z)] < 0) {
+				if(GetPixelAt(x + 1, y, z) < 0) {
 					m_nVertexNum += 18;
 				}
 			} else {
@@ -99,7 +106,7 @@ void VoxelVolume::SetData(const char *newData) {
 
 			if(y - 1 >= -8) {
 				//bottom face
-				if(vNewParsedData[getIForXYZ(x, y - 1, z)] < 0) {
+				if(GetPixelAt(x, y - 1, z) < 0) {
 					m_nVertexNum += 18;
 				}
 			} else {
@@ -108,7 +115,7 @@ void VoxelVolume::SetData(const char *newData) {
 
 			if(y + 1 < m_nVolumeHeight / 2) {
 				//top face
-				if(vNewParsedData[getIForXYZ(x, y + 1, z)] < 0) {
+				if(GetPixelAt(x, y + 1, z) < 0) {
 					m_nVertexNum += 18;
 				}
 			} else {
@@ -117,7 +124,7 @@ void VoxelVolume::SetData(const char *newData) {
 
 			if(z - 1 >= -8) {
 				//front face
-				if(vNewParsedData[getIForXYZ(x, y, z - 1)] < 0) {
+				if(GetPixelAt(x, y, z - 1) < 0) {
 					m_nVertexNum += 18;
 				}
 			} else {
@@ -126,7 +133,7 @@ void VoxelVolume::SetData(const char *newData) {
 
 			if(z + 1 < m_nVolumeDepth / 2) {
 				//front face
-				if(vNewParsedData[getIForXYZ(x, y, z + 1)] < 0) {
+				if(GetPixelAt(x, y, z + 1) < 0) {
 					m_nVertexNum += 18;
 				}
 			} else {
@@ -148,7 +155,7 @@ void VoxelVolume::SetData(const char *newData) {
 		if(vNewParsedData[i] >= 0) {
 			if(x - 1 >= -8) {
 				//left face
-				if(vNewParsedData[i-1] < 0) {
+				if(GetPixelAt(x - 1, y, z) < 0) {
 					AddFace(LEFT_FACE, x, y, z, vNewParsedData[i]);
 				}
 			} else {
@@ -157,7 +164,7 @@ void VoxelVolume::SetData(const char *newData) {
 
 			//right face
 			if(x + 1 < m_nVolumeWidth / 2) {
-				if(vNewParsedData[i+1] < 0) {
+				if(GetPixelAt(x + 1, y, z) < 0) {
 					AddFace(RIGHT_FACE, x, y, z, vNewParsedData[i]);
 				}
 			} else {
@@ -166,7 +173,7 @@ void VoxelVolume::SetData(const char *newData) {
 
 			if(y - 1 >= -8) {
 				//bottom face
-				if(vNewParsedData[i+16] < 0) {
+				if(GetPixelAt(x, y - 1, z) < 0) {
 					AddFace(BOTTOM_FACE, x, y, z, vNewParsedData[i]);
 				}
 			} else {
@@ -175,7 +182,7 @@ void VoxelVolume::SetData(const char *newData) {
 
 			if(y + 1 < m_nVolumeHeight / 2) {
 				//top face
-				if(vNewParsedData[i-16] < 0) {
+				if(GetPixelAt(x, y + 1, z) < 0) {
 					AddFace(TOP_FACE, x, y, z, vNewParsedData[i]);
 				}
 			} else {
@@ -184,7 +191,7 @@ void VoxelVolume::SetData(const char *newData) {
 
 			if(z - 1 >= -8) {
 				//front face
-				if(vNewParsedData[i-256] < 0) {
+				if(GetPixelAt(x, y, z - 1) < 0) {
 					AddFace(FRONT_FACE, x, y, z, vNewParsedData[i]);
 				}
 			} else {
@@ -193,7 +200,7 @@ void VoxelVolume::SetData(const char *newData) {
 
 			if(z + 1 < m_nVolumeDepth / 2) {
 				//back face
-				if(vNewParsedData[i+256] < 0) {
+				if(GetPixelAt(x, y, z + 1) < 0) {
 					AddFace(BACK_FACE, x, y, z, vNewParsedData[i]);
 				}
 			} else {
@@ -202,19 +209,39 @@ void VoxelVolume::SetData(const char *newData) {
 		}
 	}
 
-	m_vRawData = vNewParsedData;
+
+	m_nVolumeHeight = m_nTopBound - m_nBottomBound + 1;
+	m_nVolumeWidth = m_nRightBound - m_nLeftBound + 1;
+	m_nVolumeDepth = m_nBackBound - m_nForwardBound + 1;
+
+//	LOGI("%d %d %d", m_nVolumeWidth, m_nVolumeHeight, m_nVolumeDepth);
 }
 
 int *VoxelVolume::GetData() {
 	return m_vRawData;
 }
 
+int VoxelVolume::GetPixelAt(int x, int y, int z)
+{
+	return m_vRawData[getIForXYZ(x, y, z)];
+}
+
 void VoxelVolume::AddFace(int faceType, float x, float y, float z,int color) {
 	int k;
 	float r, g, b;
 
+	switch (faceType) {
+		case LEFT_FACE: 	x < m_nLeftBound ? m_nLeftBound = x : 0; 	break;
+		case RIGHT_FACE: 	x > m_nRightBound ? m_nRightBound = x : 0; 	break;
+		case TOP_FACE: 		y > m_nTopBound ? m_nTopBound = y : 0; 	break;
+		case BOTTOM_FACE: 	y < m_nBottomBound ? m_nBottomBound = y : 0; break;
+		case FRONT_FACE: 	z < m_nForwardBound ? m_nForwardBound = z : 0; break;
+		case BACK_FACE: 	z > m_nBackBound ? m_nBackBound = z : 0; break;
+	}
+
 	concatArray(m_vNormalData, gCubeNormalData[faceType], m_nVertexNum, 18);
 	concatArray(m_vVertexData, gCubeFaceVertices[faceType], m_nVertexNum, 18);
+
 	for(k = 0; k < 6; k++) {
 		m_vVertexData[m_nVertexNum + k * 3 + 0] += x;
 		m_vVertexData[m_nVertexNum + k * 3 + 1] += y;

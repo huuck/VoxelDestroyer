@@ -16,10 +16,15 @@ public:
 	virtual ~ActorBase();
 
 	virtual void Update(int nTime);
+
+	ActorBase*	GetCollisionPartner() { return m_pCollisionPartner; };
+	void		SetCollisionPartner( ActorBase* nCollisionPartner );
 protected:
 	float	m_fSpeedX;
 	float	m_fSpeedY;
 	float	m_fSpeedZ;
+
+	ActorBase*	m_pCollisionPartner;
 };
 
 #endif /* ACTORBASE_H_ */

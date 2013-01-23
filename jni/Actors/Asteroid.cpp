@@ -8,6 +8,8 @@
 #include "Asteroid.h"
 
 Asteroid::Asteroid(float fAngularVelocityX, float fAngularVelocityY, float fAngularVelocityZ) {
+	m_eObjectType = OBJECT_3D_ASTEROID;
+
 	m_fAngularVelocityX = fAngularVelocityX;
 	m_fAngularVelocityY = fAngularVelocityY;
 	m_fAngularVelocityZ = fAngularVelocityZ;
@@ -27,7 +29,7 @@ void Asteroid::Update(int nTime)
 	aY += m_fAngularVelocityY;
 	aZ += m_fAngularVelocityZ;
 
-	if(z > 30.0f)
+	if(z > 30.0f || m_pCollisionPartner != 0)
 	{
 		m_bExpired = true;
 	}

@@ -15,8 +15,7 @@ Spaceship::Spaceship()
 :m_eCurrentLane(1)
 ,m_eTargetLane(1)
 {
-	// TODO Auto-generated constructor stub
-
+	m_eObjectType = OBJECT_3D_SPACESHIP;
 }
 
 Spaceship::~Spaceship()

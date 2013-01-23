@@ -34,7 +34,16 @@ protected:
 	short	m_nVolumeHeight;
 	short 	m_nVolumeDepth;
 
+	short	m_nLeftBound;
+	short	m_nRightBound;
+	short	m_nTopBound;
+	short	m_nBottomBound;
+	short	m_nForwardBound;
+	short	m_nBackBound;
+
+
 	void AddFace(int faceType, float x, float y, float z,int color);
+	int GetPixelAt(int x, int y, int z);
 };
 
 #endif

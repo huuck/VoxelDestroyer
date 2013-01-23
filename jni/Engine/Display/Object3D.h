@@ -10,6 +10,13 @@
 
 class VoxelVolume;
 
+enum OBJECT3D_TYPE {
+	OBJECT_3D_UNDEFINED = 0,
+	OBJECT_3D_ASTEROID,
+	OBJECT_3D_SPACESHIP,
+	OBJECT_3D_BULLET,
+};
+
 class Object3D {
 public:
 	Object3D();
@@ -35,7 +42,12 @@ public:
 	void	SetPositionY(float fValue);
 	void	SetPositionZ(float fValue);
 
+	OBJECT3D_TYPE GetObjectType() { return m_eObjectType; };
+
 	bool	GetExpired() { return m_bExpired; };
+
+	int		GetBoundingRadius() { return m_nBoundingRadius; };
+
 private:
 	VoxelVolume*	pVolume;
 protected:
@@ -47,9 +59,12 @@ protected:
 	float			aY;
 	float			aZ;
 
+
+	int				m_nBoundingRadius;
 	int				m_nTimer;
 
 	bool			m_bExpired;
+	OBJECT3D_TYPE	m_eObjectType;
 };
 
 #endif /* OBJECT3D_H_ */
