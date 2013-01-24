@@ -27,7 +27,7 @@ public class GameJavaBridge extends GLSurfaceView {
 		super(context);
 		// TODO Auto-generated constructor stub
 		
-		init(false, 4, 0);
+		init(false, 8, 0);
 		gestureDetector = new GestureDetector(new MyGestureDetector());
 	}
 

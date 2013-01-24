@@ -153,9 +153,9 @@ GLRenderer* GLRenderer::GetInstance()
 
 void GLRenderer::PreRender()
 {
-	glClear( GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+	glClear( GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	//sets up the perspective
-	perspective_matrix(60, (double)nUIWidth/(double)nUIHeight, 0.01f, 300.0, mPerspective);
+	perspective_matrix(60, (double)nUIWidth/(double)nUIHeight, 5.0f, 300.0, mPerspective);
 }
 
 void GLRenderer::Render(int nVertexNum, float* pVertexData, float* pColorData, float* pNormalData, float fX, float fY, float fZ, float fAX, float fAY, float fAZ)
