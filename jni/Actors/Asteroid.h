@@ -12,13 +12,10 @@
 
 class Asteroid: public ActorBase {
 public:
-	Asteroid(float fAngularVelocityX, float fAngularVelocityY, float fAngularVelocityZ);
+	Asteroid();
 	virtual ~Asteroid();
 	virtual void Update(int nTime);
-private:
-	float	m_fAngularVelocityX;
-	float	m_fAngularVelocityY;
-	float	m_fAngularVelocityZ;
+	virtual void ProcessCollisionWith(ActorBase* pCollisionPartner);
 };
 
 #endif /* ASTEROID_H_ */

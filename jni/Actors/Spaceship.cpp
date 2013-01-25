@@ -25,6 +25,7 @@ Spaceship::~Spaceship()
 
 void Spaceship::Update(int nTime)
 {
+
 	ActorBase::Update(nTime);
 	float fDiff = LANE_POS_X[m_eTargetLane] - x;
 
@@ -32,11 +33,11 @@ void Spaceship::Update(int nTime)
 	{
 		m_eCurrentLane = m_eTargetLane;
 		x = LANE_POS_X[m_eTargetLane];
-		m_fSpeedX = 0.0f;
+		m_fVelocityX = 0.0f;
 	}
 	else
 	{
-		m_fSpeedX = fDiff * 4;
+		m_fVelocityX = fDiff * 10;
 	}
 }
 
@@ -58,4 +59,8 @@ void Spaceship::MoveRight()
 		LOGI("right lane, %d -> %d", m_eCurrentLane, m_eTargetLane);
 		m_nTimer = TRANSITION_DURATION;
 	}
+}
+
+void Spaceship::ProcessCollisionWith(ActorBase* pCollisionPartner)
+{
 }

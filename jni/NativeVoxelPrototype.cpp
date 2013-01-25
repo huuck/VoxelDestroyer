@@ -91,7 +91,7 @@ void AddAsteroid(int nLaneID)
 			//finds an empty spot for creating the bullet
 			if(pActors[i] == NULL)
 			{
-				pActors[i] = new Asteroid((float)rand()/(float)RAND_MAX - 0.5f, (float)rand()/(float)RAND_MAX - 0.5f, (float)rand()/(float)RAND_MAX - 0.5f);
+				pActors[i] = new Asteroid();
 				pActors[i]->Load(gSzAsteroidData);
 				pActors[i]->SetPositionX(LANE_POS_X[nLaneID]);
 				pActors[i]->SetPositionY(pActors[0]->GetPositionY());
@@ -124,9 +124,6 @@ void Step() {
 			if(pActors[i] != NULL)
 			{
 				//checks for collisions with every other blocks
-
-				pActors[i]->SetCollisionPartner(NULL);
-
 				for(j = 0; j < 128; j++)
 				{
 					if(pActors[j] != NULL && j != i)
@@ -139,8 +136,8 @@ void Step() {
 
 						if(fActorDistanceSquared < (pActors[i]->GetBoundingRadius() + pActors[j]->GetBoundingRadius()) * (pActors[i]->GetBoundingRadius() + pActors[j]->GetBoundingRadius()))
 						{
-							pActors[i]->SetCollisionPartner(pActors[j]);
-
+							pActors[i]->ProcessCollisionWith(pActors[j]);
+							pActors[j]->ProcessCollisionWith(pActors[i]);
 							break;
 						}
 					}
@@ -148,8 +145,14 @@ void Step() {
 
 				pActors[i]->Update(nStepMs);
 				pActors[i]->Render(gProgram, uiWidth, uiHeight);
+			}
+		}
 
-				if(pActors[i]->GetExpired())
+		for(i = 0; i < 128; i++)
+		{
+			if(pActors[i] != NULL)
+			{
+				if(pActors[i]->GetExpired() == true)
 				{
 					SAFE_DELETE(pActors[i]);
 				}
@@ -176,7 +179,7 @@ void FireBullet()
 			if(pActors[i] == NULL)
 			{
 				pActors[i] = new Bullet();
-				pActors[i]->Load(gSzBulletRawData);
+				pActors[i]->Load(gSzAsteroidData);
 				pActors[i]->SetPositionX(pActors[0]->GetPositionX() + 1.0f);
 				pActors[i]->SetPositionY(pActors[0]->GetPositionY() + 0.0f);
 				pActors[i]->SetPositionZ(pActors[0]->GetPositionZ() - 9.0f);

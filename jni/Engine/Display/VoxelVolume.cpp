@@ -213,8 +213,6 @@ void VoxelVolume::SetData(const char *newData) {
 	m_nVolumeHeight = m_nTopBound - m_nBottomBound + 1;
 	m_nVolumeWidth = m_nRightBound - m_nLeftBound + 1;
 	m_nVolumeDepth = m_nBackBound - m_nForwardBound + 1;
-
-//	LOGI("%d %d %d", m_nVolumeWidth, m_nVolumeHeight, m_nVolumeDepth);
 }
 
 int *VoxelVolume::GetData() {
@@ -223,13 +221,18 @@ int *VoxelVolume::GetData() {
 
 int VoxelVolume::GetPixelAt(int x, int y, int z)
 {
-	return m_vRawData[getIForXYZ(x, y, z)];
+	if(getIForXYZ(x, y, z) < m_nVolumeDepth * m_nVolumeHeight * m_nVolumeWidth)
+	{
+		return m_vRawData[getIForXYZ(x, y, z)];
+	}
+
+	return 0;
 }
 
 void VoxelVolume::AddFace(int faceType, float x, float y, float z,int color) {
 	int k;
 	float r, g, b;
-
+	LOGI("add face @ %f %f %f", x,y,z);
 	switch (faceType) {
 		case LEFT_FACE: 	x < m_nLeftBound ? m_nLeftBound = x : 0; 	break;
 		case RIGHT_FACE: 	x > m_nRightBound ? m_nRightBound = x : 0; 	break;

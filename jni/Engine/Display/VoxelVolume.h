@@ -29,6 +29,7 @@ protected:
 	float*	m_vNormalData;
 
 	int*	m_vRawData;
+	int		m_nRawDataLength;
 	int		m_nVertexNum;
 	short 	m_nVolumeWidth;
 	short	m_nVolumeHeight;

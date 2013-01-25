@@ -16,6 +16,7 @@ public:
 	virtual ~Bullet();
 
 	virtual void	Update(int nTime);
+	virtual void	ProcessCollisionWith(ActorBase* pCollisionPartner);
 };
 
 #endif /* BULLET_H_ */

@@ -10,6 +10,9 @@
 
 #include "Engine/Display/Object3D.h"
 
+#define Z_MAX  30.0f
+#define Z_MIN -300.0f
+
 class ActorBase: public Object3D {
 public:
 	ActorBase();
@@ -17,14 +20,19 @@ public:
 
 	virtual void Update(int nTime);
 
-	ActorBase*	GetCollisionPartner() { return m_pCollisionPartner; };
-	void		SetCollisionPartner( ActorBase* nCollisionPartner );
-protected:
-	float	m_fSpeedX;
-	float	m_fSpeedY;
-	float	m_fSpeedZ;
+	virtual void ProcessCollisionWith( ActorBase* nCollisionPartner );
 
-	ActorBase*	m_pCollisionPartner;
+	float	GetVelocityX() { return m_fVelocityX; };
+	float	GetVelocityY() { return m_fVelocityY; };
+	float	GetVelocityZ() { return m_fVelocityZ; };
+protected:
+	float	m_fVelocityX;
+	float	m_fVelocityY;
+	float	m_fVelocityZ;
+
+	float 	m_fAngularVelocityX;
+	float 	m_fAngularVelocityY;
+	float 	m_fAngularVelocityZ;
 };
 
 #endif /* ACTORBASE_H_ */

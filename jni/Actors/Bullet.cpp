@@ -10,7 +10,7 @@
 Bullet::Bullet() {
 	m_eObjectType = OBJECT_3D_BULLET;
 
-	m_fSpeedZ = -100.0f;
+	m_fVelocityZ = -100.0f;
 }
 
 Bullet::~Bullet() {
@@ -21,7 +21,15 @@ void Bullet::Update(int nTime)
 {
 	ActorBase::Update(nTime);
 
-	if(z < -300.0f)
+	if(z < Z_MIN)
+	{
+		m_bExpired = true;
+	}
+}
+
+void Bullet::ProcessCollisionWith(ActorBase* pCollisionPartner)
+{
+	if(pCollisionPartner->GetObjectType() == OBJECT_3D_ASTEROID)
 	{
 		m_bExpired = true;
 	}

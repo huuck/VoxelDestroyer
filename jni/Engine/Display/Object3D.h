@@ -8,6 +8,8 @@
 #ifndef OBJECT3D_H_
 #define OBJECT3D_H_
 
+#include "utils/UtilsDefines.h"
+
 class VoxelVolume;
 
 enum OBJECT3D_TYPE {
