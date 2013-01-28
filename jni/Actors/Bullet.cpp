@@ -11,6 +11,8 @@ Bullet::Bullet() {
 	m_eObjectType = OBJECT_3D_BULLET;
 
 	m_fVelocityZ = -100.0f;
+	m_fAngularVelocityY = 720.0f;
+	aX = -90.0f;
 }
 
 Bullet::~Bullet() {

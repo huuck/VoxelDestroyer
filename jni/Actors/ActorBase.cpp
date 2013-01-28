@@ -14,9 +14,11 @@ ActorBase::ActorBase()
 ,m_fAngularVelocityX(0)
 ,m_fAngularVelocityY(0)
 ,m_fAngularVelocityZ(0)
+,m_bEnabled(true)
 {
 	// TODO Auto-generated constructor stub
 
+	aY = 180;
 }
 
 ActorBase::~ActorBase()

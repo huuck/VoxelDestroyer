@@ -49,6 +49,7 @@ VoxelVolume::VoxelVolume()
 ,m_nForwardBound(0)
 ,m_nBackBound(0)
 {
+	m_vRawData = new int[4096];
 }
 
 VoxelVolume::~VoxelVolume() {
@@ -58,12 +59,7 @@ VoxelVolume::~VoxelVolume() {
 	DELETE_ARRAY(m_vRawData);
 }
 
-void VoxelVolume::SetData(int *newData) {
-	m_vRawData = newData;
-}
-
 void VoxelVolume::SetData(const char *newData) {
-	short vTriangleData[4096], nTrianglesNum;
 	int i, k;
 	m_nVertexNum = 0;
 
@@ -71,21 +67,16 @@ void VoxelVolume::SetData(const char *newData) {
 
 	float x, y, z;
 
-	short nNewDataLength = strlen(newData) - 1;
-
-	int *vNewParsedData = new int[nNewDataLength];
-
+	short nNewDataLength = strlen(newData) - 2;
 	for(i = 0; i < nNewDataLength; i++) {
-		vNewParsedData[i] = decodeColorFor(newData[4095-i]);
+		m_vRawData[i] = decodeColorFor(newData[nNewDataLength-i]);
 	}
-
-	m_vRawData = vNewParsedData;
 	for(i = 0; i < nNewDataLength; i++) {
-		z = (floorf(i/256) - 4.0f);
+		z = (floorf(i/256) - 8.0f);
 		y = -(floorf((i%256)/16) - 8.0f);
 		x = ((i%256)%16 - 8.0f);
 
-		if(vNewParsedData[i] >= 0) {
+		if(m_vRawData[i] >= 0) {
 			if(x - 1 >= -8) {
 				//left face
 				if(GetPixelAt(x - 1, y, z) < 0) {
@@ -141,7 +132,6 @@ void VoxelVolume::SetData(const char *newData) {
 			}
 		}
 	}
-
 	m_vVertexData = new float[m_nVertexNum];
 	m_vColorData = new float[m_nVertexNum];
 	m_vNormalData = new float[m_nVertexNum];
@@ -152,59 +142,59 @@ void VoxelVolume::SetData(const char *newData) {
 		y = -floorf((i-((z+8.0f)*256))/16) + 8;
 		x = (i%16 - 8.0f);
 
-		if(vNewParsedData[i] >= 0) {
+		if(m_vRawData[i] >= 0) {
 			if(x - 1 >= -8) {
 				//left face
 				if(GetPixelAt(x - 1, y, z) < 0) {
-					AddFace(LEFT_FACE, x, y, z, vNewParsedData[i]);
+					AddFace(LEFT_FACE, x, y, z, m_vRawData[i]);
 				}
 			} else {
-				AddFace(LEFT_FACE, x, y, z, vNewParsedData[i]);
+				AddFace(LEFT_FACE, x, y, z, m_vRawData[i]);
 			}
 
 			//right face
 			if(x + 1 < m_nVolumeWidth / 2) {
 				if(GetPixelAt(x + 1, y, z) < 0) {
-					AddFace(RIGHT_FACE, x, y, z, vNewParsedData[i]);
+					AddFace(RIGHT_FACE, x, y, z, m_vRawData[i]);
 				}
 			} else {
-				AddFace(RIGHT_FACE, x, y, z, vNewParsedData[i]);
+				AddFace(RIGHT_FACE, x, y, z, m_vRawData[i]);
 			}
 
 			if(y - 1 >= -8) {
 				//bottom face
 				if(GetPixelAt(x, y - 1, z) < 0) {
-					AddFace(BOTTOM_FACE, x, y, z, vNewParsedData[i]);
+					AddFace(BOTTOM_FACE, x, y, z, m_vRawData[i]);
 				}
 			} else {
-				AddFace(BOTTOM_FACE, x, y, z, vNewParsedData[i]);
+				AddFace(BOTTOM_FACE, x, y, z, m_vRawData[i]);
 			}
 
 			if(y + 1 < m_nVolumeHeight / 2) {
 				//top face
 				if(GetPixelAt(x, y + 1, z) < 0) {
-					AddFace(TOP_FACE, x, y, z, vNewParsedData[i]);
+					AddFace(TOP_FACE, x, y, z, m_vRawData[i]);
 				}
 			} else {
-				AddFace(TOP_FACE, x, y, z, vNewParsedData[i]);
+				AddFace(TOP_FACE, x, y, z, m_vRawData[i]);
 			}
 
 			if(z - 1 >= -8) {
 				//front face
 				if(GetPixelAt(x, y, z - 1) < 0) {
-					AddFace(FRONT_FACE, x, y, z, vNewParsedData[i]);
+					AddFace(FRONT_FACE, x, y, z, m_vRawData[i]);
 				}
 			} else {
-				AddFace(FRONT_FACE, x, y, z, vNewParsedData[i]);
+				AddFace(FRONT_FACE, x, y, z, m_vRawData[i]);
 			}
 
 			if(z + 1 < m_nVolumeDepth / 2) {
 				//back face
 				if(GetPixelAt(x, y, z + 1) < 0) {
-					AddFace(BACK_FACE, x, y, z, vNewParsedData[i]);
+					AddFace(BACK_FACE, x, y, z, m_vRawData[i]);
 				}
 			} else {
-				AddFace(BACK_FACE, x, y, z, vNewParsedData[i]);
+				AddFace(BACK_FACE, x, y, z, m_vRawData[i]);
 			}
 		}
 	}
@@ -230,9 +220,13 @@ int VoxelVolume::GetPixelAt(int x, int y, int z)
 }
 
 void VoxelVolume::AddFace(int faceType, float x, float y, float z,int color) {
-	int k;
+	int k = 0;
 	float r, g, b;
-	LOGI("add face @ %f %f %f", x,y,z);
+
+//	LOGI("ft - %d",faceType);
+//	LOGI("cv - %d", m_nVertexNum);
+//	LOGI("color - %d", color);
+
 	switch (faceType) {
 		case LEFT_FACE: 	x < m_nLeftBound ? m_nLeftBound = x : 0; 	break;
 		case RIGHT_FACE: 	x > m_nRightBound ? m_nRightBound = x : 0; 	break;
@@ -252,8 +246,8 @@ void VoxelVolume::AddFace(int faceType, float x, float y, float z,int color) {
 	}
 	for(k = 0; k < 6; k++) {
 		 r = (color>>16 & 0xFF);
-		 g = (color>>8 & 0xFF);
-		 b = (color>>4  & 0xFF);
+		 g = (color>>8 & 0x00FF);
+		 b = (color>>0  & 0x0000FF);
 
 		 m_vColorData[m_nVertexNum + k * 3] = (float)r / 255.0f;
 		 m_vColorData[m_nVertexNum + k * 3 + 1] = (float)g / 255.0f;

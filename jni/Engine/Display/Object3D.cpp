@@ -34,7 +34,6 @@ Object3D::Object3D()
 void Object3D::Load(const char* szData)
 {
 	pVolume->SetData(szData);
-
 	m_nBoundingRadius = MAX(MAX(pVolume->GetVolumeWidth(), pVolume->GetVolumeHeight()), pVolume->GetVolumeDepth());
 }
 

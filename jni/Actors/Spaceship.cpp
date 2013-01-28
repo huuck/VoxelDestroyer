@@ -16,6 +16,8 @@ Spaceship::Spaceship()
 ,m_eTargetLane(1)
 {
 	m_eObjectType = OBJECT_3D_SPACESHIP;
+
+	aY = 180;
 }
 
 Spaceship::~Spaceship()

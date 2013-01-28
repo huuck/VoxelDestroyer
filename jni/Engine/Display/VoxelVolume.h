@@ -6,7 +6,6 @@ public:
 	VoxelVolume();
 	~VoxelVolume();
 
-	void SetData(int *newData);
 	void SetData(const char *newData);
 	int* GetData();
     int GetVertexNum() const { return m_nVertexNum; }

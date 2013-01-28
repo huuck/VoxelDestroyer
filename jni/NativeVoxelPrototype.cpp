@@ -28,6 +28,8 @@ float uiWidth = 0.0f; float uiHeight = 0.0f;
 static Stats stats;
 ActorBase** pActors;
 
+#define	ACTORS_MAX 128
+
 static const char *gVertexShader = NULL;
 static const char *gFragmentShader  = NULL;
 static const char *gSzShipRawData  = NULL;
@@ -38,19 +40,20 @@ timespec* gLastClock;
 unsigned long int gLastTS = 0;
 
 bool bIsSceneBuilt = false;
+
+short gAddBulletOnNextFrame = false;
 bool setupGraphics(int w, int h) {
 	GLRenderer::GetInstance()->Init(w, h, gVertexShader, gFragmentShader);
 
 	if(!bIsSceneBuilt)
 	{
-		pActors = new ActorBase*[128];
+		pActors = new ActorBase*[ACTORS_MAX];
 
 		pActors[0] = new Spaceship();
 		pActors[0]->Load(gSzShipRawData);
-		pActors[0]->SetAngleY(180);
 
 		int i;
-		for(i = 1; i < 128; i++)
+		for(i = 1; i < ACTORS_MAX; i++)
 		{
 			pActors[i] = NULL;
 		}
@@ -86,7 +89,7 @@ void AddAsteroid(int nLaneID)
 	float LANE_POS_X[] = {-30.0f, 0.0f, 30.0f};
 	if(pActors != NULL)
 	{
-		for(int i = 0; i < 128; i++)
+		for(int i = 0; i < ACTORS_MAX; i++)
 		{
 			//finds an empty spot for creating the bullet
 			if(pActors[i] == NULL)
@@ -96,6 +99,28 @@ void AddAsteroid(int nLaneID)
 				pActors[i]->SetPositionX(LANE_POS_X[nLaneID]);
 				pActors[i]->SetPositionY(pActors[0]->GetPositionY());
 				pActors[i]->SetPositionZ(pActors[0]->GetPositionZ() - 300);
+				return;
+			}
+		}
+	}
+}
+
+void FireBullet()
+{
+	gAddBulletOnNextFrame = false;
+
+	if(pActors != NULL)
+	{
+		for(int i = 0; i < ACTORS_MAX; i++)
+		{
+			//finds an empty spot for creating the bullet
+			if(pActors[i] == NULL)
+			{
+				pActors[i] = new Bullet();
+				pActors[i]->Load(gSzBulletRawData);
+				pActors[i]->SetPositionX(pActors[0]->GetPositionX() + 1.0f);
+				pActors[i]->SetPositionY(pActors[0]->GetPositionY() + 0.0f);
+				pActors[i]->SetPositionZ(pActors[0]->GetPositionZ() - 9.0f);
 				return;
 			}
 		}
@@ -119,12 +144,12 @@ void Step() {
 		GLRenderer::GetInstance()->PreRender();
 
 
-		for(i = 0; i < 128; i++)
+		for(i = 0; i < ACTORS_MAX; i++)
 		{
 			if(pActors[i] != NULL)
 			{
 				//checks for collisions with every other blocks
-				for(j = 0; j < 128; j++)
+				for(j = 0; j < ACTORS_MAX; j++)
 				{
 					if(pActors[j] != NULL && j != i)
 					{
@@ -148,13 +173,17 @@ void Step() {
 			}
 		}
 
-		for(i = 0; i < 128; i++)
+		for(i = 0; i < ACTORS_MAX; i++)
 		{
 			if(pActors[i] != NULL)
 			{
 				if(pActors[i]->GetExpired() == true)
 				{
-					SAFE_DELETE(pActors[i]);
+					switch (pActors[i]->GetObjectType()) {
+						case OBJECT_3D_ASTEROID: 	SAFE_DELETE(pActors[i]); break;
+						case OBJECT_3D_BULLET: 		SAFE_DELETE(pActors[i]); break;
+
+					}
 				}
 			}
 		}
@@ -167,25 +196,10 @@ void Step() {
 		counter = 0;
 		AddAsteroid(floor((double)rand() / (double)RAND_MAX * 3.0f));
 	}
-}
 
-void FireBullet()
-{
-	if(pActors != NULL)
+	if(gAddBulletOnNextFrame)
 	{
-		for(int i = 0; i < 128; i++)
-		{
-			//finds an empty spot for creating the bullet
-			if(pActors[i] == NULL)
-			{
-				pActors[i] = new Bullet();
-				pActors[i]->Load(gSzAsteroidData);
-				pActors[i]->SetPositionX(pActors[0]->GetPositionX() + 1.0f);
-				pActors[i]->SetPositionY(pActors[0]->GetPositionY() + 0.0f);
-				pActors[i]->SetPositionZ(pActors[0]->GetPositionZ() - 9.0f);
-				return;
-			}
-		}
+		FireBullet();
 	}
 }
 
@@ -230,6 +244,6 @@ void JNICALL Java_com_kittensoft_nativevoxelprototype_NativeVoxelPrototypeLib_Ha
 
 	if(inputType == DOUBLE_TAP)
 	{
-		FireBullet();
+		gAddBulletOnNextFrame = true;
 	}
 }

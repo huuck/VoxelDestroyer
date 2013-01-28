@@ -25,6 +25,9 @@ public:
 	float	GetVelocityX() { return m_fVelocityX; };
 	float	GetVelocityY() { return m_fVelocityY; };
 	float	GetVelocityZ() { return m_fVelocityZ; };
+
+	bool	GetEnabled() { return m_bEnabled; };
+
 protected:
 	float	m_fVelocityX;
 	float	m_fVelocityY;
@@ -33,6 +36,8 @@ protected:
 	float 	m_fAngularVelocityX;
 	float 	m_fAngularVelocityY;
 	float 	m_fAngularVelocityZ;
+
+	bool	m_bEnabled;
 };
 
 #endif /* ACTORBASE_H_ */
