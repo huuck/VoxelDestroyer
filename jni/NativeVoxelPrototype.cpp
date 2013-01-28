@@ -159,7 +159,7 @@ void Step() {
 
 						fActorDistanceSquared = fActorDistanceX * fActorDistanceX + fActorDistanceY * fActorDistanceY + fActorDistanceZ * fActorDistanceZ;
 
-						if(fActorDistanceSquared < (pActors[i]->GetBoundingRadius() + pActors[j]->GetBoundingRadius()) * (pActors[i]->GetBoundingRadius() + pActors[j]->GetBoundingRadius()))
+						if(fActorDistanceSquared < ((pActors[i]->GetBoundingRadius() + pActors[j]->GetBoundingRadius()) / 2) * ((pActors[i]->GetBoundingRadius() + pActors[j]->GetBoundingRadius()) / 2))
 						{
 							pActors[i]->ProcessCollisionWith(pActors[j]);
 							pActors[j]->ProcessCollisionWith(pActors[i]);
@@ -242,7 +242,7 @@ void JNICALL Java_com_kittensoft_nativevoxelprototype_NativeVoxelPrototypeLib_Ha
 		((Spaceship*)pActors[0])->MoveRight();
 	}
 
-	if(inputType == DOUBLE_TAP)
+	if(inputType == SINGLE_TAP)
 	{
 		gAddBulletOnNextFrame = true;
 	}

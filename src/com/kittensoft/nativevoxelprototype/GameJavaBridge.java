@@ -98,7 +98,7 @@ class MyGestureDetector extends SimpleOnGestureListener {
 	
 	private static int SWIPE_LEFT = 1;
 	private static int SWIPE_RIGHT = 2;
-	private static int DOUBLE_TAP = 3;
+	private static int SINGLE_TAP = 3;
 	
     @Override
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
@@ -118,9 +118,9 @@ class MyGestureDetector extends SimpleOnGestureListener {
     }
     
     @Override
-    public boolean onDoubleTap(MotionEvent e) {
+    public boolean onSingleTapUp(MotionEvent e) {
     	Log.d("doubletap", "doubletap");
-    	NativeVoxelPrototypeLib.HandleMouseInput(DOUBLE_TAP);
+    	NativeVoxelPrototypeLib.HandleMouseInput(SINGLE_TAP);
     	return false;
     }
 

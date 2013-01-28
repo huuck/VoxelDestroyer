@@ -34,6 +34,6 @@ if (ptr != NULL)            \
 #define TRANSFORM_MAT_LENGTH 16
 #define SWIPE_LEFT 1
 #define SWIPE_RIGHT 2
-#define DOUBLE_TAP 3
+#define SINGLE_TAP 3
 
 #endif /* UTILSDEFINES_H_ */
