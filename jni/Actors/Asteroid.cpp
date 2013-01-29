@@ -13,9 +13,9 @@ Asteroid::Asteroid() {
 
 	m_fVelocityZ = (float)rand()/(float)RAND_MAX * 50.0f + 75.0f;
 
-	m_fAngularVelocityX = (float)rand()/(float)RAND_MAX - 0.5f;
-	m_fAngularVelocityY = (float)rand()/(float)RAND_MAX - 0.5f;
-	m_fAngularVelocityZ = (float)rand()/(float)RAND_MAX - 0.5f;
+	m_fAngularVelocityX = ((float)rand()/(float)RAND_MAX - 0.5f) * 360.0f;
+	m_fAngularVelocityY = ((float)rand()/(float)RAND_MAX - 0.5f) * 360.0f;
+	m_fAngularVelocityZ = ((float)rand()/(float)RAND_MAX - 0.5f) * 360.0f;
 }
 
 Asteroid::~Asteroid() {

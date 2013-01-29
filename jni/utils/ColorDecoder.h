@@ -41,7 +41,7 @@ double decodeColorFor(char c) {
 }
 
 int getIForXYZ(float x, float y, float z) {
-	return ((x+8.0f) + (y+8.0f) * 16.0f + (z+8.0f) * 256.0f);
+	return (x + y * 16.0f + z * 256.0f);
 }
 
 #endif /* COLORDECODER_H_ */

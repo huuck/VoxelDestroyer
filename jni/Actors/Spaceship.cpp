@@ -17,7 +17,7 @@ Spaceship::Spaceship()
 {
 	m_eObjectType = OBJECT_3D_SPACESHIP;
 
-	aY = 180;
+	aY = 0;
 }
 
 Spaceship::~Spaceship()
