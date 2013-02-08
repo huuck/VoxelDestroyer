@@ -36,4 +36,8 @@ if (ptr != NULL)            \
 #define SWIPE_RIGHT 2
 #define SINGLE_TAP 3
 
+#define	MAX_WIDTH 16
+#define	MAX_HEIGHT 16
+#define	MAX_DEPTH 16
+
 #endif /* UTILSDEFINES_H_ */

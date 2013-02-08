@@ -63,6 +63,7 @@ void Spaceship::MoveRight()
 	}
 }
 
-void Spaceship::ProcessCollisionWith(ActorBase* pCollisionPartner)
+void Spaceship::CollisionHandler(ActorBase* pCollisionPartner)
 {
+
 }

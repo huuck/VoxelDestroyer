@@ -11,7 +11,7 @@ Bullet::Bullet() {
 	m_eObjectType = OBJECT_3D_BULLET;
 
 	m_fVelocityZ = -100.0f;
-	m_fAngularVelocityY = 720.0f;
+	m_fAngularVelocityY = 1440.0f;
 	aX = -90.0f;
 }
 
@@ -29,7 +29,7 @@ void Bullet::Update(int nTime)
 	}
 }
 
-void Bullet::ProcessCollisionWith(ActorBase* pCollisionPartner)
+void Bullet::CollisionHandler(ActorBase* pCollisionPartner)
 {
 	if(pCollisionPartner->GetObjectType() == OBJECT_3D_ASTEROID)
 	{

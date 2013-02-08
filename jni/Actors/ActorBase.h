@@ -20,7 +20,7 @@ public:
 
 	virtual void Update(int nTime);
 
-	virtual void ProcessCollisionWith( ActorBase* nCollisionPartner );
+	void ProcessCollisionWith( ActorBase* nCollisionPartner );
 
 	float	GetVelocityX() { return m_fVelocityX; };
 	float	GetVelocityY() { return m_fVelocityY; };
@@ -29,6 +29,8 @@ public:
 	bool	GetEnabled() { return m_bEnabled; };
 
 protected:
+	virtual void CollisionHandler( ActorBase* nCollisionPartner );
+
 	float	m_fVelocityX;
 	float	m_fVelocityY;
 	float	m_fVelocityZ;

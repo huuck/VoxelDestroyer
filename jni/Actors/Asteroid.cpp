@@ -32,9 +32,9 @@ void Asteroid::Update(int nTime)
 	}
 }
 
-void Asteroid::ProcessCollisionWith(ActorBase* pCollisionPartner)
+void Asteroid::CollisionHandler(ActorBase* pCollisionPartner)
 {
-	if(pCollisionPartner->GetObjectType() == OBJECT_3D_BULLET && m_bEnabled == true)
+	if(pCollisionPartner->GetObjectType() == OBJECT_3D_BULLET)
 	{
 		m_fVelocityZ += pCollisionPartner->GetVelocityZ() * 0.8;
 		m_fVelocityY += (float)rand()/(float)RAND_MAX * 50.0f + 50.0f;

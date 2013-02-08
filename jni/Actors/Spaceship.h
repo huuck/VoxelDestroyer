@@ -20,10 +20,11 @@ public:
 	virtual ~Spaceship();
 
 	virtual void	Update(int nTime);
-	virtual void	ProcessCollisionWith(ActorBase* pCollisionPartner);
 
 	void	MoveLeft();
 	void	MoveRight();
+protected:
+	virtual void CollisionHandler(ActorBase* pCollisionPartner);
 private:
 	float	m_fTargetX;
 

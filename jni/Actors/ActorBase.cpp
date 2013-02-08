@@ -39,4 +39,14 @@ void ActorBase::Update(int nTime)
 
 void ActorBase::ProcessCollisionWith(ActorBase* pCollisionPartner)
 {
+	if(m_bEnabled == true)
+	{
+		CollisionHandler(pCollisionPartner);
+	}
 }
+
+void ActorBase::CollisionHandler(ActorBase* pCollisionPartner)
+{
+
+}
+

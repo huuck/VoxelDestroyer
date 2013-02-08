@@ -31,8 +31,6 @@ const short RIGHT_FACE_BIT = 8;
 const short BACK_FACE_BIT = 16;
 const short BOTTOM_FACE_BIT = 32;
 
-
-
 VoxelVolume::VoxelVolume()
 :m_nVolumeWidth(16)
 ,m_nVolumeHeight(16)
@@ -66,22 +64,22 @@ void VoxelVolume::SetData(const char *newData) {
 
 	short nNewDataLength = strlen(newData) - 2;
 
-	for(z = 0; z < 16; z++)
+	for(z = 0; z < MAX_DEPTH; z++)
 	{
-		for(y = 0; y < 16; y++)
+		for(y = 0; y < MAX_HEIGHT; y++)
 		{
-			for(x = 0; x < 16; x++)
+			for(x = 0; x < MAX_WIDTH; x++)
 			{
 				m_vRawData[x][y][z] = decodeColorFor(newData[getIForXYZ(x,y,z)]);
 			}
 		}
 	}
 
-	for(z = 0; z < 16; z++)
+	for(z = 0; z < MAX_DEPTH; z++)
 	{
-		for(y = 0; y < 16; y++)
+		for(y = 0; y < MAX_HEIGHT; y++)
 		{
-			for(x = 0; x < 16; x++)
+			for(x = 0; x < MAX_WIDTH; x++)
 			{
 				if(m_vRawData[x][y][z] > 0)
 				{

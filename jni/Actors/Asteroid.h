@@ -15,7 +15,8 @@ public:
 	Asteroid();
 	virtual ~Asteroid();
 	virtual void Update(int nTime);
-	virtual void ProcessCollisionWith(ActorBase* pCollisionPartner);
+protected:
+	virtual void CollisionHandler(ActorBase* pCollisionPartner);
 };
 
 #endif /* ASTEROID_H_ */
